@@ -7,13 +7,21 @@ export async function getUsers(req, res){
     // res.send(usersdata)
 
 
-    UserModel.find().then((usersData)=>{
-        console.log(usersData)
-       res.send(usersData)
-    }).catch((e)=>{
-        console.error(e);
-    })
+    // UserModel.find().then((usersData)=>{
+    //     console.log(usersData)
+    //    res.send(usersData)
+    // }).catch((e)=>{
+    //     console.error(e);
+    // })
 
+    const {name} = req.query
+    if(!name) res.status(404).json({ok: false, message: "No Query!"})
+    else{
+        const users = await UserModel.find({name: name})
+        if(users.length <= 0) res.status(404).json({ok: false, message: "No Users Found!"})
+        else res.status(200).json({ok: true, message: "Users found!", users: users})
+
+    }
 }
 
 export async function insertUser(req, res){
